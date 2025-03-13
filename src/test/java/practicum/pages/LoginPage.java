@@ -7,7 +7,7 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
-import java.time.Duration; // Импортируем Duration
+import java.time.Duration;
 
 import static practicum.Constants.*;
 
@@ -18,10 +18,6 @@ public class LoginPage extends BasePage {
     }
 
     private final By loginHeader = By.xpath(LOGIN_HEADER_TEXT);
-    private final By emailInput = By.xpath(INPUT_EMAIL_XPATH);
-    private final By pwdInput = By.xpath(INPUT_PWD_XPATH);
-    private final By enterBtn = By.xpath(ENTER_BTN_XPATH);
-    private final By recoverPwdLink = By.xpath(RECOVER_PWD_LINK_XPATH);
 
     @Step("Открываем форму Вход")
     public LoginPage open() {
@@ -37,7 +33,7 @@ public class LoginPage extends BasePage {
 
     @Step("Очищаем и заполняем поле Email")
     public LoginPage fillInEmail(String email) {
-        WebElement emailField = waitForElementToBeClickable(emailInput);
+        WebElement emailField = waitForElementToBeClickable(By.xpath(INPUT_EMAIL_XPATH));
         emailField.clear();
         emailField.sendKeys(email);
         return this;
@@ -45,7 +41,7 @@ public class LoginPage extends BasePage {
 
     @Step("Очищаем и заполняем поле Пароль")
     public LoginPage fillInPwd(String pwd) {
-        WebElement pwdField = waitForElementToBeClickable(pwdInput);
+        WebElement pwdField = waitForElementToBeClickable(By.xpath(INPUT_PWD_XPATH));
         pwdField.clear();
         pwdField.sendKeys(pwd);
         return this;
@@ -53,12 +49,13 @@ public class LoginPage extends BasePage {
 
     @Step("Нажимаем кнопку Войти")
     public LoginPage enterBtnClick() {
-        waitForElementToBeClickable(enterBtn).click();
+        waitForElementToBeClickable(By.xpath(ENTER_BTN_XPATH)).click();
         return this;
     }
 
     private WebElement waitForElementToBeClickable(By locator) {
-        return new WebDriverWait(driver, Duration.ofSeconds(5)) // Используем Duration вместо long
+        return new WebDriverWait(driver, Duration.ofSeconds(5))
                 .until(ExpectedConditions.elementToBeClickable(locator));
     }
 }
+

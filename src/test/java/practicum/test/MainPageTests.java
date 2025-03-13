@@ -1,6 +1,5 @@
 package practicum.test;
 
-
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
@@ -8,59 +7,65 @@ import org.junit.Test;
 import org.openqa.selenium.WebDriver;
 import practicum.pages.LoginPage;
 import practicum.pages.MainPage;
-import practicum.pages.PersonalAccountPage;
 
 import static practicum.Constants.USER_PWD;
 import static practicum.WebDriverFactory.getDriver;
 
 public class MainPageTests {
-    private WebDriver driver; // Объявляем driver как поле класса
-    private MainPage mainPage;
-    private LoginPage loginPage;
-    private PersonalAccountPage personalArea;
-    private UserSteps userSteps;
+    private WebDriver driver; // Поле для управления WebDriver
+    private MainPage mainPage; // Главная страница
+   private LoginPage loginPage; // Страница входа
+    private UserSteps userSteps; // Шаги для работы с пользователем
 
     @Before
     public void prepare() {
-        driver = getDriver(); // Инициализируем driver в методе prepare
-        userSteps = new UserSteps(); // Инициализируем userSteps
+        // Инициализация WebDriver и шагов пользователя
+        driver = getDriver(); // Инициализация WebDriver
+        userSteps = new UserSteps();
+
+        // Создание и регистрация случайного пользователя
         userSteps.createRandomUser().registerUser();
 
-        loginPage = new LoginPage(driver);
+        // Авторизация
+       loginPage = new LoginPage(driver);
         loginPage.open()
-                .fillInEmail(userSteps.getUserEmail())
-                .fillInPwd(USER_PWD)
+               .fillInEmail(userSteps.getUserEmail()) // Используем email созданного пользователя
+                .fillInPwd(USER_PWD) // Вводим пароль
                 .enterBtnClick();
 
-        mainPage = new MainPage(driver);
-        personalArea = new PersonalAccountPage(driver);
+        // Переход на главную страницу
+        mainPage = new MainPage(driver); // Инициализация MainPage
     }
 
     @Test
     public void bunsBtnClickTest() {
-        mainPage.saucesBtnClick();
-        mainPage.bunsBtnClick().scrollIngredientsMenu();
-        Assert.assertTrue("Заголовок булок не виден", mainPage.isHeaderVisible());
+        // Тест на проверку работы кнопки "Булки"
+        mainPage.saucesBtnClick(); // Нажимаем на "Соусы"
+        mainPage.bunsBtnClick().scrollIngredientsMenu(); // Возвращаемся к "Булкам" и скроллим
+        Assert.assertTrue("Заголовок 'Булки' не виден", mainPage.isHeaderVisible());
     }
 
     @Test
     public void saucesBtnTest() {
+        // Тест на проверку работы кнопки "Соусы"
         mainPage.saucesBtnClick();
         Assert.assertTrue("Кнопка 'Соусы' не нажата", mainPage.isSaucesBtnPushed());
     }
 
     @Test
     public void fillingsBtnClickTest() {
+        // Тест на проверку работы кнопки "Начинки"
         mainPage.fillingsBtnClick();
         Assert.assertTrue("Кнопка 'Начинки' не нажата", mainPage.isFillingsBtnPushed());
     }
 
     @After
     public void clear() {
-        if (driver != null) { // Проверяем, что driver не равен null перед закрытием
+        // Очистка: завершение работы WebDriver и удаление пользователя
+        if (driver != null) {
             driver.close();
             driver.quit();
         }
-        userSteps.deleteUser();
+        userSteps.deleteUser(); // Удаляем созданного пользователя
     }
 }

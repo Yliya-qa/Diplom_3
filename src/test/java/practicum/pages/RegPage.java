@@ -14,7 +14,6 @@ import static practicum.Constants.*;
 
 public class RegPage extends BasePage {
 
-    private String userName;
     private String email;
 
     public RegPage(WebDriver driver) {
@@ -41,7 +40,6 @@ public class RegPage extends BasePage {
 
     @Step("Заполняем поле Имя на форме регистрации")
     public RegPage fillInUserName(String userName) {
-        this.userName = userName;
         driver.findElement(userNameInput).clear();
         driver.findElement(userNameInput).sendKeys(userName);
         return this;
